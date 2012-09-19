@@ -1,0 +1,42 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', '-g', 'coffee' ]
+2 info using npm@1.1.61
+3 info using node@v0.8.9
+4 verbose read json /usr/local/lib/package.json
+5 verbose read json /usr/local/lib/package.json
+6 verbose cache add [ 'coffee', null ]
+7 silly cache add name=undefined spec="coffee" args=["coffee",null]
+8 verbose parsed url { pathname: 'coffee', path: 'coffee', href: 'coffee' }
+9 silly lockFile 44213f9f-coffee coffee
+10 verbose lock coffee /Users/moung00b/.npm/44213f9f-coffee.lock
+11 silly lockFile 44213f9f-coffee coffee
+12 verbose addNamed [ 'coffee', '' ]
+13 verbose addNamed [ null, '' ]
+14 silly lockFile 6f24caa5-coffee coffee@
+15 verbose lock coffee@ /Users/moung00b/.npm/6f24caa5-coffee.lock
+16 silly addNameRange { name: 'coffee', range: '', hasData: false }
+17 verbose url raw coffee
+18 verbose url resolving [ 'https://registry.npmjs.org/', './coffee' ]
+19 verbose url resolved https://registry.npmjs.org/coffee
+20 info trying registry request attempt 1 at 16:45:08
+21 http GET https://registry.npmjs.org/coffee
+22 http 404 https://registry.npmjs.org/coffee
+23 silly registry.get cb [ 404,
+23 silly registry.get   { server: 'CouchDB/1.2.0 (Erlang OTP/R15B)',
+23 silly registry.get     date: 'Wed, 19 Sep 2012 20:45:10 GMT',
+23 silly registry.get     'content-type': 'application/json',
+23 silly registry.get     'content-length': '52',
+23 silly registry.get     'cache-control': 'must-revalidate' } ]
+24 silly lockFile 6f24caa5-coffee coffee@
+25 error 404 'coffee' is not in the npm registry.
+25 error 404 You should bug the author to publish it
+25 error 404
+25 error 404 Note that you can also install from a
+25 error 404 tarball, folder, or http url, or git url.
+26 error System Darwin 11.4.0
+27 error command "node" "/usr/local/bin/npm" "install" "-g" "coffee"
+28 error cwd /Users/moung00b/dev/js-booltastic/src
+29 error node -v v0.8.9
+30 error npm -v 1.1.61
+31 error code E404
+32 verbose exit [ 1, true ]

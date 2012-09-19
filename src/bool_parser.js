@@ -131,7 +131,7 @@ module.exports = (function(){
           pos = pos1;
         }
         if (result0 !== null) {
-          result0 = (function(offset, left, right) { return [left, "AND", right]; })(pos0, result0[0], result0[2]);
+          result0 = (function(offset, left, right) { return ["AND", left, right]; })(pos0, result0[0], result0[2]);
         }
         if (result0 === null) {
           pos = pos0;
@@ -176,7 +176,7 @@ module.exports = (function(){
           pos = pos1;
         }
         if (result0 !== null) {
-          result0 = (function(offset, left, right) { return [left, "OR", right]; })(pos0, result0[0], result0[2]);
+          result0 = (function(offset, left, right) { return ["OR", left, right]; })(pos0, result0[0], result0[2]);
         }
         if (result0 === null) {
           pos = pos0;
@@ -238,17 +238,24 @@ module.exports = (function(){
           }
           if (result0 === null) {
             pos0 = pos;
+            pos1 = pos;
             result0 = parse_not();
             if (result0 !== null) {
-              result1 = parse_terminal();
+              result1 = parse_primary();
               if (result1 !== null) {
                 result0 = [result0, result1];
               } else {
                 result0 = null;
-                pos = pos0;
+                pos = pos1;
               }
             } else {
               result0 = null;
+              pos = pos1;
+            }
+            if (result0 !== null) {
+              result0 = (function(offset, p) { return ["NOT", p] })(pos0, result0[1]);
+            }
+            if (result0 === null) {
               pos = pos0;
             }
           }
@@ -258,9 +265,7 @@ module.exports = (function(){
       
       function parse_not() {
         var result0;
-        var pos0;
         
-        pos0 = pos;
         if (input.substr(pos, 4) === "NOT ") {
           result0 = "NOT ";
           pos += 4;
@@ -269,12 +274,6 @@ module.exports = (function(){
           if (reportFailures === 0) {
             matchFailed("\"NOT \"");
           }
-        }
-        if (result0 !== null) {
-          result0 = (function(offset) {return "NOT";})(pos0);
-        }
-        if (result0 === null) {
-          pos = pos0;
         }
         return result0;
       }

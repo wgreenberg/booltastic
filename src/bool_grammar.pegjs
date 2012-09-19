@@ -6,20 +6,20 @@ start
   = and
 
 and
-  = left:or " AND " right:and { return [left, "AND", right]; }
+  = left:or " AND " right:and { return ["AND", left, right]; }
   / or
 
 or
-  = left:primary " OR " right:or { return [left, "OR", right]; }
+  = left:primary " OR " right:or { return ["OR", left, right]; }
   / primary
 
 primary
   = terminal
   / "(" and:and ")" { return and; }
-  / not terminal
+  / not p:primary { return ["NOT", p] }
 
 not
-  = "NOT " {return "NOT";}
+  = "NOT "
 
 terminal "terminal"
   = [a-z]
