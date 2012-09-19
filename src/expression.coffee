@@ -4,10 +4,9 @@ class exports.Expression
   
   constructor: (expr_str) ->
     @expr_str = expr_str
-    @tree = parser.parse(@expr_str)
     
   toString: ->
     @expr_str
     
   toTree: ->
-    @tree
+    parser.parse(@expr_str)
