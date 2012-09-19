@@ -1,3 +1,7 @@
+/*
+ * Made for use with the fantastic PEG.js: http://pegjs.majda.cz/
+ */
+
 start
   = and
 
