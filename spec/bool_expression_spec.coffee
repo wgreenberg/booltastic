@@ -52,10 +52,12 @@ describe "Boolean expressions", ->
 
   it "should be able to replace arbitrary subexpressions", ->
     replacement = "p"
-    
-    expect(e.Expression.toString(e.Expression.treeReplace(@expr, "0", replacement))).toBe("p OR ((NOT a) AND b)")
-    expect(e.Expression.toString(e.Expression.treeReplace(@expr, "1", replacement))).toBe("(a AND b) OR p")
-    expect(e.Expression.toString(e.Expression.treeReplace(@expr, "10", replacement))).toBe("(a AND b) OR (p AND b)")
+    replaceLeftWithP = e.Expression.treeReplace(@expr, "0", replacement)
+    replaceRightWithP = e.Expression.treeReplace(@expr, "1", replacement)
+    replaceRightLeftWithP = e.Expression.treeReplace(@expr, "10", replacement)
+    expect(e.Expression.toString(replaceLeftWithP)).toBe("p OR ((NOT a) AND b)")
+    expect(e.Expression.toString(replaceRightWithP)).toBe("(a AND b) OR p")
+    expect(e.Expression.toString(replaceRightLeftWithP)).toBe("(a AND b) OR (p AND b)")
 
   it "should show equality by left-association", ->
     exp1 = new e.Expression "(a AND b) AND c"

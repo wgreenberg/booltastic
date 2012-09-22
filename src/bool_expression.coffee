@@ -48,14 +48,13 @@ class exports.Expression
       return new Expression(newExp)
 
     return new Expression(undefined)
-    
 
   @treeReplace: (exp, prefix, subexp) ->
     if prefix == ""
       return subexp
 
     directions = prefix.split("").map((c) -> parseInt(c, 10)).reverse()
-    orig_tree = exp.get_tree().slice(0)
+    orig_tree = JSON.parse(JSON.stringify(exp.get_tree()))
 
     tree = orig_tree
 
