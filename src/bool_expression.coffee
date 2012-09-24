@@ -34,6 +34,63 @@ class exports.Expression
       tree = tree[1+directions.pop()]
 
     new Expression(tree)
+    
+  commute: (root) ->
+    op = @subExpression(root).get_tree()[0]
+    a = @subExpression(root + "0").get_tree()
+    b = @subExpression(root + "1").get_tree()
+    allDefined = ([a, b].filter (x) -> x == undefined).length == 0
+    
+    if allDefined
+      newExp = Expression.treeReplace(@, root, [op, b, a])
+      return new Expression(newExp)
+    return new Expression(undefined)
+
+  deMorgan1: (root) ->
+    shouldBeNot = @subExpression(root).get_tree()[0]
+    expr = @subExpression(root).get_tree()
+    op = expr[1][0]
+    a = @subExpression(root + "0").get_tree()
+    b = @subExpression(root + "1").get_tree()
+    allDefined = ([expr, op, a, b].filter (x) -> x == undefined).length == 0
+    
+    if(allDefined && shouldBeNot == "NOT")
+      console.log op
+      newOp = if op == "AND" then "OR" else "AND"
+      newExp = Expression.treeReplace(@, root, [newOp, ["NOT", a], ["NOT", b]])
+      return new Expression(newExp)
+    
+    console.log "undefined!!!"
+    return new Expression(undefined)
+  
+  deMorgan2: (root) ->
+    expr = @subExpression(root).get_tree()
+    op = expr[0]
+    a = @subExpression(root + "0").get_tree()
+    b = @subExpression(root + "1").get_tree()
+    allDefined = ([expr, op, a, b].filter (x) -> x == undefined).length == 0
+    
+    if(allDefined)
+      newOp = if op == "AND" then "OR" else "AND"
+      newExp = Expression.treeReplace(@, root, ["NOT", [newOp, ["NOT", a], ["NOT", b]]])
+      return new Expression(newExp)
+ 
+    return new Expression(undefined)
+    
+  right_associate: (root) ->
+    op1 = @subExpression(root).get_tree()[0]
+    op2 = @subExpression(root + "1").get_tree()[0]
+    a = @subExpression(root + "0").get_tree()
+    b = @subExpression(root + "10").get_tree()
+    c = @subExpression(root + "11").get_tree()
+    allDefined = ([op1, op2, a, b, c].filter (x) -> x == undefined).length == 0
+
+    if(allDefined && op1 == op2)
+      newExp = Expression.treeReplace(@, root, [op1, [op2, a, b], c])
+      return new Expression(newExp)
+
+    return new Expression(undefined)
+
 
   left_associate: (root) ->
     op1 = @subExpression(root).get_tree()[0]
