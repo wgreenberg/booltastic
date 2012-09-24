@@ -59,7 +59,7 @@ describe "Boolean expressions", ->
     expect(e.Expression.toString(replaceRightWithP)).toBe("(a AND b) OR p")
     expect(e.Expression.toString(replaceRightLeftWithP)).toBe("(a AND b) OR (p AND b)")
 
-  it "should show equality by left-association", ->
+  it "should perform left-association", ->
     exp1 = new e.Expression "(a AND b) AND c"
     exp2 = new e.Expression "a AND (b AND c)"
 
@@ -70,8 +70,8 @@ describe "Boolean expressions", ->
     expect(strfy(exp1.left_associate("").get_tree())).toBe(strfy(exp2.get_tree()))
     expect(strfy(exp4.left_associate("").get_tree())).toBe(strfy(exp5.get_tree()))
     expect(strfy(exp5.left_associate("1").get_tree())).toBe(strfy(exp6.get_tree()))
-    
-  it "should show equality by right-association", ->
+
+  it "should perform right-association", ->
     exp1 = new e.Expression "(a AND b) AND c"
     exp2 = new e.Expression "a AND (b AND c)"
 
@@ -83,7 +83,7 @@ describe "Boolean expressions", ->
     expect(strfy(exp5.right_associate("").get_tree())).toBe(strfy(exp4.get_tree()))
     expect(strfy(exp6.right_associate("1").get_tree())).toBe(strfy(exp5.get_tree()))
     
-  it "should show equality by commutivity", ->
+  it "should perform commutivity", ->
     exp1 = new e.Expression "a AND b"
     exp2 = new e.Expression "b AND a"
     
@@ -96,7 +96,7 @@ describe "Boolean expressions", ->
     expect(strfy(exp3.commute("0").get_tree())).toBe(strfy(exp4.get_tree()))
     expect(strfy(exp4.commute("").get_tree())).toBe(strfy(exp5.get_tree()))
     
-  it "should show equality by DeMorgan's law type 1", ->
+  it "should perform DeMorgan's law type 1", ->
     # ~(a and b) => ~a or ~b
     exp1 = new e.Expression "NOT (a AND b)"
     exp2 = new e.Expression "(NOT a) OR (NOT b)"
@@ -107,13 +107,35 @@ describe "Boolean expressions", ->
     expect(strfy(exp1.deMorgan1("").get_tree())).toBe(strfy(exp2.get_tree()))
     expect(strfy(exp3.deMorgan1("").get_tree())).toBe(strfy(exp4.get_tree()))
     
-  it "should show equality by DeMorgan's law type 2", ->
+  it "should perform DeMorgan's law type 2", ->
     # ~a or ~b => ~(a and b) 
     exp2 = new e.Expression "(NOT a) OR (NOT b)"
-    exp1 = new e.Expression "NOT (a AND b)"
+    exp1 = new e.Expression "NOT ((NOT (NOT a)) AND (NOT (NOT b)))"
     
-    exp4 = new e.Expression "(NOT (NOT a)) AND (NOT (b AND c))"
-    exp3 = new e.Expression "NOT ((NOT a) OR (b AND c))"
+    exp4 = new e.Expression "a AND (b AND c)"
+    exp3 = new e.Expression "NOT ((NOT a) OR (NOT (b AND c)))"
     
     expect(strfy(exp2.deMorgan2("").get_tree())).toBe(strfy(exp1.get_tree()))
     expect(strfy(exp4.deMorgan2("").get_tree())).toBe(strfy(exp3.get_tree()))
+    
+  it "should perform double negation type 1", ->
+    # ~(~a) => a
+    exp1 = new e.Expression "NOT (NOT a)"
+    exp2 = new e.Expression "a"
+
+    exp3 = new e.Expression "a AND (NOT (NOT b))"
+    exp4 = new e.Expression "a AND b"
+
+    expect(strfy(exp1.doubleNegation1("").get_tree())).toBe(strfy(exp2.get_tree()))
+    expect(strfy(exp3.doubleNegation1("1").get_tree())).toBe(strfy(exp4.get_tree()))
+
+  it "should perform double negation type 2", ->
+    # a => ~(~a)
+    exp1 = new e.Expression "NOT (NOT a)"
+    exp2 = new e.Expression "a"
+
+    exp3 = new e.Expression "a AND (NOT (NOT b))"
+    exp4 = new e.Expression "a AND b"
+
+    expect(strfy(exp2.doubleNegation2("").get_tree())).toBe(strfy(exp1.get_tree()))
+    expect(strfy(exp4.doubleNegation2("1").get_tree())).toBe(strfy(exp3.get_tree()))

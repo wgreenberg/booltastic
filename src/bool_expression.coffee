@@ -46,6 +46,24 @@ class exports.Expression
       return new Expression(newExp)
     return new Expression(undefined)
 
+  doubleNegation1: (root) ->
+    not1 = @subExpression(root).get_tree()[0]
+    not2 = @subExpression(root).get_tree()[1][0]
+    expr = @subExpression(root + "0")
+
+    if(not1 == "NOT" && not2 == "NOT" && expr.isDefined())
+      newExp = Expression.treeReplace(@, root, expr.get_tree())
+      return new Expression(newExp)
+    return new Expression(undefined)
+
+  doubleNegation2: (root) ->
+    expr = @subExpression(root).get_tree()
+
+    if(expr != undefined)
+      newExp = Expression.treeReplace(@, root, ["NOT", ["NOT", expr]])
+      return new Expression(newExp)
+    return new Expression(undefined)
+
   deMorgan1: (root) ->
     shouldBeNot = @subExpression(root).get_tree()[0]
     expr = @subExpression(root).get_tree()
@@ -55,12 +73,10 @@ class exports.Expression
     allDefined = ([expr, op, a, b].filter (x) -> x == undefined).length == 0
     
     if(allDefined && shouldBeNot == "NOT")
-      console.log op
       newOp = if op == "AND" then "OR" else "AND"
       newExp = Expression.treeReplace(@, root, [newOp, ["NOT", a], ["NOT", b]])
       return new Expression(newExp)
     
-    console.log "undefined!!!"
     return new Expression(undefined)
   
   deMorgan2: (root) ->
